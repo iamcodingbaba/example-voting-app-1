@@ -14,7 +14,7 @@ pipeline{
             }
             stage("docker stop and remove"){
                 step{
-                    sh "docker stop $(docker ps -a -q)"
+                     sh "docker stop $(docker ps -a -q)"
                 }
                 
             
