@@ -1,10 +1,10 @@
 pipeline{
     agent{
-        label "worker"
+        label "slave"
     }
     stages{
         stage("docker build and push"){
-            step{
+            steps{
                 sh '''
                     cd vote
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 271919715952.dkr.ecr.us-east-1.amazonaws.com
