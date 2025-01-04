@@ -1,18 +1,29 @@
 pipeline{
-    agent {
-        label 'worker'
+    agent{
+        label "worker"
     }
     stages{
-        stage("Build and Push"){
-            steps{
+        stage("docker build and push"){
+            step{
                 sh '''
                     cd vote
-                    aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 463470963027.dkr.ecr.ap-south-1.amazonaws.com
-                    docker build -t 463470963027.dkr.ecr.ap-south-1.amazonaws.com/demo:vote_v_${BUILD_NUMBER} .
-                    docker push 463470963027.dkr.ecr.ap-south-1.amazonaws.com/demo:vote_v_${BUILD_NUMBER}
-                    kubectl set image deployment vote vote=463470963027.dkr.ecr.ap-south-1.amazonaws.com/demo:vote_v_${BUILD_NUMBER}
-                    kubectl rollout restart deployment vote
-                '''
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 271919715952.dkr.ecr.us-east-1.amazonaws.com
+                    docker build -t 271919715952.dkr.ecr.us-east-1.amazonaws.com/coding_baba:latest-${BUILD_NUMBER} .
+                    docker push 271919715952.dkr.ecr.us-east-1.amazonaws.com/coding_baba:latest-${BUILD_NUMBER}
+                    '''
+            }
+            stage("docker stop and remove"){
+                step{
+                    sh "docker stop $(docker ps -a -q)"
+                }
+                
+            
+            }
+            stage("docker run"){
+                step{
+                    sh "docker run -itd -p 627:80 271919715952.dkr.ecr.us-east-1.amazonaws.com/coding_baba:latest-${BUILD_NUMBER}"
+                }
+
             }
         }
     }
