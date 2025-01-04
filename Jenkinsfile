@@ -1,6 +1,6 @@
 pipeline{
     agent{
-        label "worker"
+        label 'worker'
     }
     stages{
         stage("docker build and push"){
